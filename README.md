@@ -15,7 +15,7 @@ The easiest way to include Akashic.js in your project is by adding the script ta
 ```html
 <script src="path/to/akashic.min.js" defer></script>
 ```
-Replace `path/to/akashic.min.js` with the actual path to the Akashic.js file in your project (check out (RELEASES.md)[https://github.com/NaeemBolchhi/akashic-js/blob/main/RELEASES.md]). It's recommended to include the defer attribute for optimal loading.
+Replace `path/to/akashic.min.js` with the actual path to the Akashic.js file in your project. It's recommended to include the defer attribute for optimal loading.
 
 ### Usage
 Akashic.js offers two ways to declare and manage your assets:
@@ -27,7 +27,7 @@ You can define all your assets as a JSON string within the `data-akashic` attrib
 <script src="akashic.min.js" defer data-akashic='{ /* JSON config */ }'></script>
 ```
 
-The JSON config can also be **LZW** compressed and/or encoded to **Base64**.
+The JSON config can also be **LZW** compressed and/or encoded to **Base64**. Use a tool like [Code Beautify](https://codebeautify.org/jsonviewer) to minify your JSON config.
 
 ```json
 {
@@ -122,14 +122,20 @@ You can also declare assets using custom HTML tags directly within your `head` o
 2. **Version Check:** For each asset, it checks if a cached version exists in **localStorage** and if its version matches or is newer than the declared version.
 
 3. **Fetch & Cache:**
-- If an asset is new or its version is outdated, Akashic.js fetches the resource from its specified `path` and `filename`.
-- The fetched content is then compressed using LZW and stored in either **localStorage** ("ls") or **IndexedDB** ("indb") based on your configuration.
+  - If an asset is new or its version is outdated, Akashic.js fetches the resource from its specified `path` and `filename`.
+  - The fetched content is then compressed using LZW and stored in either **localStorage** ("ls") or **IndexedDB** ("indb") based on your configuration.
 
 4. **Inject & Serve:**
-- For assets already in cache or newly fetched, Akashic.js dynamically injects the content directly into the DOM (as `<style>` tags for CSS, and `<script>` tags for HTML fragments and JavaScript). This minimizes network requests on subsequent visits.
-- As HTML fragments are stored as `*.html.js` or `*.html.min.js` files, they will contain both the html code and some js code for inserting the html code somewhere in the DOM when the file is loaded into a `<script>` tag.
+  - For assets already in cache or newly fetched, Akashic.js dynamically injects the content directly into the DOM (as `<style>` tags for CSS, and `<script>` tags for HTML fragments and JavaScript). This minimizes network requests on subsequent visits.
+  - As HTML fragments are stored as `*.html.js` or `*.html.min.js` files, they will contain both the html code and some js code for inserting the html code somewhere in the DOM when the file is loaded into a `<script>` tag.
 
 5. **Cleanup:** After processing, Akashic.js removes its temporary global variables and any custom tags from the DOM, leaving a clean page.
+
+## Releases
+Release links are shared in the `dist` folder, and links can be found in [RELEASES.md](https://github.com/NaeemBolchhi/akashic-js/blob/main/RELEASES.md).
+
+## Changelogs
+Track changes with each version update in [CHANGELOGS.md](https://github.com/NaeemBolchhi/akashic-js/blob/main/CHANGELOGS.md).
 
 ## Development
 To contribute or set up a development environment:
@@ -142,16 +148,13 @@ cd akashic-js
 ```
 
 2. Make your changes.
-
 3. Run tests.
-
 4. Open a Pull Request!
 
 ## Gratitude
 - [LZW Compression](https://rosettacode.org/wiki/LZW_compression#JavaScript)
 - Easy IndexedDB Handler by Gemini
 - [Proper Base64 Encoding and Decoding](https://stackoverflow.com/a/30106551)
-
 
 ## License
 Akashic.js is released under the [MIT License](https://github.com/NaeemBolchhi/akashic-js/blob/main/README.md).
