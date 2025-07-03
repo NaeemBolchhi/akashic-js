@@ -132,10 +132,7 @@ You can also declare assets using custom HTML tags directly within your `head` o
 5. **Cleanup:** After processing, Akashic.js removes its temporary global variables and any custom tags from the DOM, leaving a clean page.
 
 ## Releases
-Release links are shared in the `dist` folder, and links can be found in [RELEASES.md](https://github.com/NaeemBolchhi/akashic-js/blob/main/RELEASES.md).
-
-## Changelogs
-Track changes with each version update in [CHANGELOGS.md](https://github.com/NaeemBolchhi/akashic-js/blob/main/CHANGELOGS.md).
+Release links can be found in [CDN.md](https://github.com/NaeemBolchhi/akashic-js/blob/main/CDN.md).
 
 ## Development
 To contribute or set up a development environment:
