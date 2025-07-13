@@ -13,4 +13,4 @@ If you are using the `data-akashic` attribute to serve your JSON config, add it 
 
 ## v0.1.0
 
-IndexedDB is not working properly in this version, do not use
+IndexedDB is not working properly in this version, do not use.
