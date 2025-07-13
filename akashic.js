@@ -1,6 +1,6 @@
 /*!
     Akashic.js -- Quicksave for Websites
-    Version 0.1.0
+    Version 0.1.1
     https://github.com/NaeemBolchhi/akashic-js
     (c) 2025 NaeemBolchhi, MIT License
 */
@@ -92,10 +92,10 @@ const LZW = {
 
 // IndexedDB easy interaction
 const inDB = {
-    "dbName": 'AkashicDB',
-    "storeName": 'AkashicAssets',
-    "dbVersion": 1,
-    "open": async function () {
+    dbName: 'AkashicDB',
+    storeName: 'AkashicAssets',
+    dbVersion: 1,
+    open: async function () {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(inDB.dbName, inDB.dbVersion);
 
@@ -115,7 +115,7 @@ const inDB = {
             };
         });
     },
-    "write": async function (key, value) {
+    write: async function (key, value) {
         let db;
         try {
             db = await inDB.open();
@@ -145,7 +145,7 @@ const inDB = {
             throw error;
         }
     },
-    "read": async function (key) {
+    read: async function (key) {
         let db;
         try {
             db = await inDB.open();
@@ -179,14 +179,14 @@ const inDB = {
 
 // Base64 string conversion
 const base64 = {
-    "do": function (string) {
+    do: function (string) {
         return btoa(encodeURIComponent(string).replace(/%([0-9A-F]{2})/g,
             function toSolidBytes(match, p1) {
                 return String.fromCharCode('0x' + p1);
             })
         );
     },
-    "undo": function (string) {
+    undo: function (string) {
         return decodeURIComponent(atob(string).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
@@ -197,7 +197,11 @@ const base64 = {
 async function consolidateAssets() {
     let aTag = document.querySelector('script[src*="akashic.min.js"],script[src*="akashic.js"]');
 
-    window.akashicAssets = {};
+    window.akashicAssets = {
+        "html": [],
+        "css": [],
+        "js": []
+    };
 
     if (aTag.getAttribute('data-akashic') !== null && aTag.getAttribute('data-akashic') !== "") {
         let aTagData = aTag.getAttribute('data-akashic');
@@ -225,7 +229,7 @@ async function consolidateAssets() {
     }
 
     // Add custom tags to the same js object
-    let dynamicTags = document.querySelectorAll('akashic-css,akashic-html,akashic-js');
+    let dynamicTags = document.querySelectorAll('akashic-css,akashic-html,akashic-js,link[rel="akashic"]');
 
     for (let x = 0; x < dynamicTags.length; x++) {
         let tp = dynamicTags[x].tagName.toLowerCase().replace(/^.*\-/i,''),
@@ -235,6 +239,10 @@ async function consolidateAssets() {
             pr = dynamicTags[x].closest('head,body').tagName.toLowerCase(),
             id = dynamicTags[x].getAttribute('data-id') || '',
             st = dynamicTags[x].getAttribute('data-store') || 'ls';
+
+        if (tp === "link") {
+            tp = dynamicTags[x].getAttribute('data-tag');
+        }
 
         window.akashicAssets[tp].push({
             "fn": fn,
@@ -249,7 +257,7 @@ async function consolidateAssets() {
 
 // Wipe HTML fragment JS and other remains
 async function clearRemains() {
-    let remains = document.querySelectorAll('script[data-frag="true"],akashic-css,akashic-html,akashic-js');
+    let remains = document.querySelectorAll('script[data-frag="true"],akashic-css,akashic-html,akashic-js,link[rel="akashic"]');
 
     for (let x = 0; x < remains.length; x++) {
         remains[x].remove();
@@ -490,19 +498,19 @@ async function doJS(key, type) {
 
 // Optimize indexed db transfers, one for all
 const moveDB = {
-    "dbkey": 'aCache',
-    "toWindow": async function () {
+    dbkey: 'aCache',
+    toWindow: async function () {
         window.inDBCache = await inDB.read(moveDB.dbkey);
     },
-    "toCache": async function () {
-        const merged = Object.assign({}, await inDB.load(moveDB.dbkey), window.inDBCache);
+    toCache: async function () {
+        const merged = Object.assign({}, await inDB.read(moveDB.dbkey), window.inDBCache);
         await inDB.write(moveDB.dbkey, merged);
     }
 };
 
 // Store and retrieve data
 const localCache = {
-    "fetch": async function (fileLink, fn) {
+    fetch: async function (fileLink, fn) {
         try {
             const response = await fetch(fileLink + '?' + Date.now());
 
@@ -517,7 +525,7 @@ const localCache = {
             console.error(`Akashic.js Error: Failed to fetch '${fn}' from ${fileLink}:`, error);
         }
     },
-    "quicksave": async function (fileLink, fn, fileType) {
+    quicksave: async function (fileLink, fn, fileType) {
         try {
             let oneData = await localCache.fetch(fileLink, fn);
 
@@ -529,7 +537,7 @@ const localCache = {
             console.error(`Akashic.js Error: Failed to cache '${fn}':`, error);
         }
     },
-    "save": async function (fileLink, fn, fileType) {
+    save: async function (fileLink, fn, fileType) {
         try {
             let oneData = await localCache.fetch(fileLink, fn);
 
@@ -541,7 +549,7 @@ const localCache = {
             console.error(`Akashic.js Error: Failed to cache '${fn}':`, error);
         }
     },
-    "quickload": async function (key) {
+    quickload: async function (key) {
         try {
             let value = localStorage.getItem(key);
 
@@ -554,7 +562,7 @@ const localCache = {
             return null;
         }
     },
-    "load": async function (key) {
+    load: async function (key) {
         try {
             let value = window.inDBCache[key];
 

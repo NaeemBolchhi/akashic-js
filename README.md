@@ -6,7 +6,7 @@ Akashic.js is a lightweight JavaScript library designed to enhance website perfo
 - **Version Control:** Automatically updates cached assets when a new version is supplied, ensuring users always have the latest content.
 - **LZW Compression:** Utilizes LZW compression to reduce the size of cached data, optimizing storage and transfer.
 - **Base64 Encoding/Decoding:** Handles Base64 encoding and decoding for data passed via the data-akashic attribute.
-- **Declarative Asset Management:** Define your assets directly in your HTML using a `data-akashic` attribute on the script tag or through custom HTML tags (`<akashic-css>`, `<akashic-html>`, `<akashic-js>`).
+- **Declarative Asset Management:** Define your assets directly in your HTML using a `data-akashic` attribute on the script tag or through custom HTML tags (`<akashic-css>`, `<akashic-html>`, `<akashic-js>`, `<link rel="akashic">`).
 
 ## Getting Started
 ### Installation
@@ -98,23 +98,25 @@ You can also declare assets using custom HTML tags directly within your `head` o
 
 ```html
 <head>
-    <akashic-css data-name="normalize.min.css" data-path="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/" data-version="1" data-store="ls"></akashic-css>
-    <akashic-css data-name="main.min.css" data-path="/styles/" data-id="light" data-version="1" data-store="indb"></akashic-css>
-    <akashic-js data-name="theme.min.js" data-path="/scripts/" data-version="1" data-store="indb"></akashic-js>
+    <link rel="akashic" data-tag="css" data-name="normalize.min.css" data-path="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/" data-version="1" data-store="ls">
+    <link rel="akashic" data-tag="css" data-name="main.min.css" data-path="/styles/" data-id="light" data-version="1" data-store="indb">
+    <link rel="akashic" data-tag="js" data-name="theme.min.js" data-path="/scripts/" data-version="1" data-store="indb">
 </head>
 <body>
     <akashic-html data-name="home.html.min.js" data-path="/hfrags/" data-version="1" data-store="ls"></akashic-html>
+    <akashic-css data-name="special.min.css" data-path="/styles/" data-version="1" data-store="ls"></akashic-html>
     <akashic-js data-name="main.min.js" data-path="/scripts/" data-version="1" data-store="indb"></akashic-js>
 </body>
 ```
 
 ##### Attribute Details for Custom Tags:
+- **`data-tag:`** Akashic custom tags don't work in `<head>` due to browser rules. Instead, `<link rel="akashic">` can be used when defining elements in `<head>`. In this case, you need the `data-tag` attribute to define it as `css`, `js`, or `html`.
 - **`data-name:`** Equivalent to `fn` in the JSON configuration.
 - **`data-path:`** Equivalent to `pt`.
 - **`data-version:`** Equivalent to `vr`.
 - **`data-store:`** Equivalent to `st`.
 - **`data-id` (optional):** Equivalent to `id`.
-- **parent:** Automatically detected based on whether the custom tag is inside `head` or `body`. Equivalent to `pr`. Only applicable to `<akashic-js>`.
+- **parent:** Automatically detected based on whether the custom tag is inside `<head>` or `<body>`. Equivalent to `pr`. Only applicable to `js`.
 
 ## How it Works
 1. **Asset Consolidation:** On page load, Akashic.js scans for declared assets (via `data-akashic` attribute or custom tags, or both) and consolidates them into a single internal object.
