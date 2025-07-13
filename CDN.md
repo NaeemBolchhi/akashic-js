@@ -11,4 +11,6 @@ If you are using the `data-akashic` attribute to serve your JSON config, add it 
 <script src="https://raw.githubusercontent.com/NaeemBolchhi/akashic-js/refs/tags/v0.1.1/akashic.min.js"></script>
 ```
 
-## v0.1.0 (IndexedDB is not working properly in this version, do not use)
+## v0.1.0
+
+IndexedDB is not working properly in this version, do not use
